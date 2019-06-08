@@ -1,0 +1,8 @@
+{
+  "name": "google-photos-updater",
+  "version": "0.0.1",
+  "description": "",
+  "dependencies": {
+    "puppeteer": "1.0.0"
+  }
+}
