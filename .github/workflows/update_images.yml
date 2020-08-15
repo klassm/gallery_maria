@@ -1,0 +1,47 @@
+name: Update images
+on:
+  repository_dispatch:
+    types: [update_images]
+
+  workflow_dispatch:
+    inputs:
+
+  schedule:
+    - cron:  '0 12 * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    if: github.actor == github.event.repository.owner.login
+
+    steps:
+      - name: Configure SSH keys
+        env:
+          deployment_private_key: ${{ secrets.deployment_private_key }}
+        run: |
+          mkdir ~/.ssh
+          echo "${{ secrets.deployment_private_key }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Checkout
+        run: git clone git@github.com:klassm/gallery_maria.git
+
+      - name: Install dependencies
+        run: |
+          cd gallery_maria/update-album && npm install
+
+      - name: Update images
+        run: cd gallery_maria/update-album && node update-album.js
+
+      - name: Commit result
+        run: |
+          cd gallery_maria
+          git add site/public/config.json
+          git add docs/config.json
+          git config --global user.email "gallerymaria_github@klass.li"
+          git config --global user.name "Gallery Updater Github"
+          git commit -am "update photos"
+          git push
+
