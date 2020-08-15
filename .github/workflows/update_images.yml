@@ -42,6 +42,6 @@ jobs:
           git add docs/config.json
           git config --global user.email "gallerymaria_github@klass.li"
           git config --global user.name "Gallery Updater Github"
-          git commit -am "update photos"
+          git commit -am "update photos" || true
           git push
 
