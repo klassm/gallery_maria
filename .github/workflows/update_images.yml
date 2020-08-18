@@ -14,8 +14,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    if: github.actor == github.event.repository.owner.login
-
     steps:
       - name: Configure SSH keys
         env:
